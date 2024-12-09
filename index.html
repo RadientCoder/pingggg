@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f8fa;
+            color: #14171a;
+        }
+        header {
+            background-color: #1da1f2;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+        form {
+            margin: 20px 0;
+            width: 90%;
+            max-width: 500px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0d8cd4;
+        }
+        .tweets-container {
+            width: 90%;
+            max-width: 500px;
+            margin: 20px 0;
+        }
+        .tweet {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>Tweet Preview</header>
+    <form id="tweetForm">
+        <textarea id="tweetInput" rows="4" placeholder="What's happening?" required></textarea>
+        <button type="submit">Send Tweet</button>
+    </form>
+    <div class="tweets-container" id="tweetsContainer"></div>
+
+    <script>
+        const tweetForm = document.getElementById('tweetForm');
+        const tweetInput = document.getElementById('tweetInput');
+        const tweetsContainer = document.getElementById('tweetsContainer');
+
+        // Load tweets from localStorage
+        const loadTweets = () => {
+            const tweets = JSON.parse(localStorage.getItem('tweets')) || [];
+            tweets.forEach(displayTweet);
+        };
+
+        // Save tweet to localStorage
+        const saveTweet = (content) => {
+            const tweets = JSON.parse(localStorage.getItem('tweets')) || [];
+            tweets.push(content);
+            localStorage.setItem('tweets', JSON.stringify(tweets));
+        };
+
+        // Display a tweet
+        const displayTweet = (content) => {
+            const tweetElement = document.createElement('div');
+            tweetElement.className = 'tweet';
+            tweetElement.innerHTML = `<p>${content}</p>`;
+            tweetsContainer.appendChild(tweetElement);
+        };
+
+        // Handle form submission
+        tweetForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const tweetContent = tweetInput.value.trim();
+            if (tweetContent) {
+                saveTweet(tweetContent);
+                displayTweet(tweetContent);
+                tweetInput.value = '';
+            }
+        });
+
+        // Initialize
+        loadTweets();
+    </script>
+</body>
+</html>
